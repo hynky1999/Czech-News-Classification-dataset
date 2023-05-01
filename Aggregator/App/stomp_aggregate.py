@@ -43,7 +43,6 @@ def run():
         queue_host=args.queue_host,
         queue_port=args.queue_port,
         index_agg=index_aggregator,
-        heartbeat=1
     )
 
     asyncio.run(aggregator.aggregate())
