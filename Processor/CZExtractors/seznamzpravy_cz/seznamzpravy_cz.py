@@ -57,8 +57,11 @@ def article_fc(tag: Tag):
     if tag.name == "div" and len(allowed_classes_div.intersection(classes)) > 0:
         return True
 
-    if tag.name == "div" and tag.get("data-dot", "") == "mol-paragraph":
-        return True
+    # check if "mol-paragraph" is value of any attribute
+    if tag.name == "div" and tag.attrs:
+        for attr in tag.attrs.values():
+            if isinstance(attr, str) and attr == "mol-paragraph":
+                return True
 
     if tag.name == "figure" and len(allowed_classes_figure.intersection(classes)) > 0:
         return True

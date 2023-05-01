@@ -44,8 +44,14 @@ def article_transform_fc(tag: Tag):
     classes = tag.get("class", [])
     if isinstance(classes, str):
         classes = [classes]
+
     if tag.name == "div" and len(allowed_classes_div.intersection(classes)) > 0:
         return True
+
+    if tag.name == "div" and tag.attrs:
+        for attr in tag.attrs.values():
+            if isinstance(attr, str) and attr == "mol-paragraph":
+                return True
 
     return False
 

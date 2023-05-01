@@ -1,7 +1,8 @@
 #!/bin/bash
-INDEXORS=('idnes.cz' 'aktualne.cz' 'novinky.cz' 'denik.cz' 'seznamzpravy.cz' 'irozhlas.cz' 'ihned.cz')
+# INDEXORS=('idnes.cz' 'aktualne.cz' 'novinky.cz' 'denik.cz' 'seznamzpravy.cz' 'irozhlas.cz' 'ihned.cz')
+INDEXORS=('idnes.cz')
 PYTHON_PATH="/opt/python/3.10.4/bin/python3"
-ARTEMIS_HOST="cpu-node15"
+ARTEMIS_HOST="cpu-node-3"
 ARTEMIS_PORT="61602"
 HTTP_PORT="6100"
 ARTEMIS_MEMORY_MAX="64g"
@@ -13,17 +14,18 @@ PROCESSOR_PATH="${CUR_DIR}/Processor"
 AGGREGATOR_PATH="${CUR_DIR}/Aggregator"
 ARTEMIS_PATH="$CUR_DIR/Artemis"
 ARTEMIS_RUN_PATH=$ARTEMIS_PATH/run_artemis
-EXC="qsub -j y -cwd"
-PROCESSORS_NUM="$((7 * ${#INDEXORS[@]}))"
+EXC="sbatch"
+# PROCESSORS_NUM="$((7 * ${#INDEXORS[@]}))"
+PROCESSORS_NUM=1
 # If fresh start =1 then all Artemis data will be deleted
 # -> duplicates will be forgotten and data lost.
 # Good for testing.
 FRESH_START=1
 
 #Artemis
-$EXC -o artemis.log -e artemis.err -q "cpu.q@$ARTEMIS_HOST" \
--pe smp 4 \
--l mem_free="$ARTEMIS_MEMORY_MAX",act_mem_free="$ARTEMIS_MEMORY_MAX" \
+$EXC -o artemis.log -e artemis.err -q "$ARTEMIS_HOST" \
+--cpus-per-task=4 \
+--mem-per-cpu="$ARTEMIS_MEMORY_MAX" \
 "$ARTEMIS_PATH/create_artemis.sh" \
 "$ARTEMIS_PATH" \
 "$ARTEMIS_RUN_PATH" \
@@ -44,7 +46,8 @@ for index in "${INDEXORS[@]}"; do
     $EXC -o "aggregator_$index.log" -e "aggregator_$index.err" "$AGG_EXEC" "$CUR_DIR" \
     --queue_host="$ARTEMIS_HOST" \
     --queue_port=$ARTEMIS_PORT \
-    --max_retry=50 \
+    --max_retry=100 \
+    --sleep_step=10 \
     "$index"
 done
 
@@ -65,7 +68,9 @@ for ((i=0; i < "$PROCESSORS_NUM"; ++i)); do
     --timeout=360 \
     --max_retry=20 \
     --extractors_path="$PROCESSOR_PATH/App/DoneExtractors" \
-    --config_path="$PROCESSOR_PATH/App/config.json"
+    "$PROCESSOR_PATH/App/config.json" \
+    "queue.idnes.cz"
+
 done
 
 

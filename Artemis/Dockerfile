@@ -6,7 +6,7 @@ RUN apt-get update && \
     apt-get install -y unzip && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 WORKDIR /opt
-RUN wget "https://dlcdn.apache.org/activemq/activemq-artemis/2.23.1/apache-artemis-2.23.1-bin.zip" && \
+RUN wget https://archive.apache.org/dist/activemq/activemq-artemis/2.23.1/apache-artemis-2.23.1-bin.zip && \
     unzip apache-artemis-2.23.1-bin.zip && \
     mv apache-artemis-2.23.1 artemis-create && \
     rm apache-artemis-2.23.1-bin.zip

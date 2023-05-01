@@ -58,8 +58,6 @@ async def pipeline_wrapper(config: ExtractConfig, files_path: Path, output_path:
 
 class ExtractSameTest(unittest.IsolatedAsyncioTestCase):
 
-
-
     def setUp(self) -> None:
         config_path = Path("config.json")
         with open(config_path, "r") as f:

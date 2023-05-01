@@ -29,7 +29,7 @@ multiple_tabs = re.compile(r"\t\s*\t+")
 def text_unification_transform(text: str):
     text = multiple_new_line.sub("\n", text)
     text = multiple_tabs.sub("\n", text)
-    return text.strip().replace("\xa0", " ")
+    return text.replace("\xa0", " ").strip()
 
 
 def article_content_transform(
@@ -73,12 +73,11 @@ def author_transform(author: str):
 
 
 headline_sub = re.compile(r"ONLINE:")
-
+headline_name_sub = re.compile(r"[-–|][^-–|]*(Novinky.cz|Aktuálně.cz|aktualne.cz|denik.cz|deník.cz|ihned.cz|idnes.cz|seznam\ zprávy|seznamzpravy.cz).*$", re.IGNORECASE)
 
 def headline_transform(headline: str):
-    headline = re.split(r"[-–]", headline)[0]
-    headline = re.split(r"[|]", headline)[0]
     headline = headline_sub.sub("", headline)
+    headline = headline_name_sub.sub("", headline)
     return text_unification_transform(headline)
 
 
