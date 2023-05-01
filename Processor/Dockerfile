@@ -1,11 +1,6 @@
-FROM continuumio/miniconda3
+FROM python:3.10
 WORKDIR /var/lib/Processor
-COPY ./environment.yml .
-RUN conda env create --name myenv --file environment.yml
+COPY ./requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 COPY ./App ./App
-COPY ./UserDefined ./UserDefined
-COPY processor.py .
-COPY __init__.py .
-WORKDIR /var/lib
-SHELL ["conda", "run", "-n", "myenv"]
-ENTRYPOINT ["conda", "run", "--no-capture-output", "-n", "myenv", "python3", "-m" , "Processor.processor", "--output_path=/output"]
+ENTRYPOINT [ "python3", "-m", "App.artemis_process"]

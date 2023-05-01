@@ -1,0 +1,115 @@
+{
+    "extractors_path": "./CZExtractors",
+    "routes": [
+        {
+            "regexes": [
+                ".*idnes\\.cz.*"
+            ],
+            "extractors": [
+                {
+                    "name": "idnes_cz_v1",
+                    "to": "2011-08-09T00:00:00+00:00"
+                },
+                {
+                    "name": "idnes_cz_v2",
+                    "since": "2011-08-09T00:00:00+00:00"
+                }
+            ]
+        },
+        {
+            "regexes": [
+                ".*aktualne\\.cz.*"
+            ],
+            "extractors": [
+                {
+                    "name": "aktualne_cz_v1",
+                    "to": "2014-09-10T00:00:00+00:00"
+                },
+                {
+                    "name": "aktualne_cz_v2",
+                    "since": "2014-09-10T00:00:00+00:00",
+                    "to": "2019-09-10T00:00:00+00:00"
+                },
+                {
+                    "name": "aktualne_cz_v3",
+                    "since": "2019-09-10T00:00:00+00:00"
+                }
+            ]
+        },
+        {
+            "regexes": [
+                ".*denik\\.cz.*"
+            ],
+            "extractors": [
+                {
+                    "name": "denik_cz_v1",
+                    "to": "2012-02-29T00:00:00+00:00"
+                },
+                {
+                    "name": "denik_cz_v2",
+                    "since": "2012-02-29T00:00:00+00:00",
+                    "to": "2018-12-01T00:00:00+00:00"
+                },
+                {
+                    "name": "denik_cz_v3",
+                    "since": "2018-12-01T00:00:00+00:00"
+                }
+            ]
+        },
+        {
+            "regexes": [
+                ".*novinky\\.cz.*"
+            ],
+            "extractors": [
+                {
+                    "name": "novinky_cz_v1",
+                    "to": "2019-08-06T00:00:00+00:00"
+                },
+                {
+                    "name": "novinky_cz_v2",
+                    "since": "2019-08-06T00:00:00+00:00"
+                }
+            ]
+        },
+        {
+            "regexes": [
+                ".*seznamzpravy\\.cz.*"
+            ],
+            "extractors": [
+                {
+                    "name": "seznamzpravy_cz"
+                }
+            ]
+        },
+        {
+            "regexes": [
+                ".*ihned\\.cz.*"
+            ],
+            "extractors": [
+                {
+                    "name": "ihned_cz_v1",
+                    "to": "2011-05-05T00:00:00+00:00"
+                },
+                {
+                    "name": "ihned_cz_v2",
+                    "since": "2011-05-05T00:00:00+00:00",
+                    "to": "2019-05-05T00:00:00+00:00"
+                },
+                {
+                    "name": "ihned_cz_v3",
+                    "since": "2019-05-05T00:00:00+00:00"
+                }
+            ]
+        },
+        {
+            "regexes": [
+                ".*irozhlas\\.cz.*"
+            ],
+            "extractors": [
+                {
+                    "name": "irozhlas_cz"
+                }
+            ]
+        }
+    ]
+}

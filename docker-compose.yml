@@ -3,6 +3,8 @@ services:
   artemis:
     build: "./Artemis"
     container_name: "artemis"
+    # Persistent volume
+    # Make sure you prune to get clean state for test runs
     volumes:
       - artemis-data:/var/lib/artemis/data
     ports:
@@ -14,10 +16,10 @@ services:
         reservations:
           memory: 8g
 
-  producer-idnes.cz:
+  producer-bbc.com:
     # This is the producer service, you can have multiple of them
     build: ./Aggregator
-    command: [ "--to=2021-12-04", "--since=2019-12-12", "idnes.cz" ]
+    command: [ "--to=2021-03-20", "--since=2021-01-20", "bbc.com" ]
     depends_on:
       - consumer
 
@@ -30,8 +32,7 @@ services:
         "--use_hostname_output",
         "--timeout=1",
         "--pills_to_die=1",
-        "--queue_size=200",
-        "--config_path=Processor/UserDefined/cz_config.json"
+        "--queue_size=200"
       ]
     volumes:
       - ./output:/output:z
