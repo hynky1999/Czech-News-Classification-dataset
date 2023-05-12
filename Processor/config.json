@@ -1,5 +1,5 @@
 {
-    "extractors_path": "./CZExtractors",
+    "extractors_path": "./Processor/CZExtractors",
     "routes": [
         {
             "regexes": [

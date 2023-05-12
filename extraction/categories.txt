@@ -1,0 +1,25 @@
+Zahraniční, World
+Domácí, Home
+Sport, Sport
+Kultura, Culture
+Revue, Celebrity
+Koktejl, Gossip and curiosities
+Ekonomika, Economy
+Krimi, Crime
+Podnikání, Entrepreneurship
+Auto, Car
+Věda, Science
+Komentáře, Comments
+Cestování, Travel
+Finance, Finance
+Technologie, Technology
+Bydlení, Housing
+Koronavirus, Coronavirus
+Byznys, Business
+Rozhovory, Interviews
+Podcasty, Podcasts
+Životní styl, Lifestyle
+Literatura, Literature
+Vánoce, Christmas
+Výtvarné umění, Fine arts
+Kolo, Bike

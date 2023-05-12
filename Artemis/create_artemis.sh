@@ -14,7 +14,7 @@ ARTEMIS_CREATE="$ARTEMIS_PATH/artemis-create"
 
 
 if [[ ! -e $ARTEMIS_CREATE ]]; then
-    wget "https://dlcdn.apache.org/activemq/activemq-artemis/2.23.1/apache-artemis-2.23.1-bin.zip"
+    wget "https://archive.apache.org/dist/activemq/activemq-artemis/2.23.1/apache-artemis-2.23.1-bin.zip"
     unzip  "./apache-artemis-2.23.1-bin.zip"
     rm  "./apache-artemis-2.23.1-bin.zip"
     mv "apache-artemis-2.23.1" "$ARTEMIS_CREATE"

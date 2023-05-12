@@ -45,7 +45,7 @@ def run():
         index_agg=index_aggregator,
     )
 
-    asyncio.run(aggregator.aggregate())
+    asyncio.run(aggregator.aggregate(filter_duplicates=False))
 
 if __name__ == "__main__":
     run()

@@ -49,7 +49,7 @@ def get_args():
     parser.add_argument("--use_hostname_output", action="store_true")
     parser.add_argument("--timeout", type=int, default=60)
     parser.add_argument("--max_retry", type=int, default=20)
-    parser.add_argument("--sleep_step", type=int, default=5)
+    parser.add_argument("--sleep_step", type=int, default=15)
     return parser.parse_args()
 
 def run():

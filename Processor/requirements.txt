@@ -1,1 +1,1 @@
-CmonCrawl==0.8.4
+CmonCrawl==0.8.6
