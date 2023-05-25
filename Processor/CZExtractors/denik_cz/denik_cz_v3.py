@@ -22,7 +22,6 @@ from cmoncrawl.common.types import PipeMetadata
 
 
 class DenikV3Extractor(ArticleExtractor):
-    SINCE = datetime(2018, 12, 1)
 
     def __init__(self):
         super().__init__(

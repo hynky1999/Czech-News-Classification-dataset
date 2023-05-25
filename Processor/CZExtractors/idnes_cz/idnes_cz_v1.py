@@ -22,8 +22,6 @@ from cmoncrawl.processor.extraction.utils import (
 
 
 class IdnesCZV1Extractor(ArticleExtractor):
-    ENCODING = "windows-1250"
-    TO = datetime(2011, 8, 9)
 
     def __init__(self):
         super().__init__(
@@ -65,6 +63,7 @@ class IdnesCZV1Extractor(ArticleExtractor):
                 "category": [get_text_transform, category_transform],
             },
             "#main",
+            encoding="windows-1250"
         )
 
 
