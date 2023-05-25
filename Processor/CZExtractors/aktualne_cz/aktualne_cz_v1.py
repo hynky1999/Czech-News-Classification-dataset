@@ -42,7 +42,6 @@ def article_fc(tag: Tag):
 
 
 class AktualneCZV1Extractor(ArticleExtractor):
-    TO = datetime(2014, 9, 10)
 
     def __init__(self):
 

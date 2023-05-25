@@ -57,7 +57,6 @@ def article_transform_fc(tag: Tag):
 
 
 class NovinkyCZV2Extractor(ArticleExtractor):
-    SINCE = datetime(2019, 8, 6)
 
     def __init__(self):
         super().__init__(

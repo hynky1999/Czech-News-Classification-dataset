@@ -21,8 +21,6 @@ from cmoncrawl.processor.extraction.utils import (
 
 
 class IdnesCZV2Extractor(ArticleExtractor):
-    ENCODING = "windows-1250"
-    SINCE = datetime(2011, 8, 9)
 
     def __init__(self):
         super().__init__(
@@ -70,6 +68,8 @@ class IdnesCZV2Extractor(ArticleExtractor):
                 "div#paywall-unlock",
                 "div#paywall",
             ],
+            encoding="windows-1250"
+
         )
 
 

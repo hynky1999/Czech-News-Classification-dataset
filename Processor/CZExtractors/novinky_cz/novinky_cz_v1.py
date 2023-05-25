@@ -23,7 +23,6 @@ from cmoncrawl.common.types import PipeMetadata
 
 
 class NovinkyCZV1Extractor(ArticleExtractor):
-    TO = datetime(2019, 8, 6)
 
     def __init__(self):
         super().__init__(

@@ -47,8 +47,6 @@ year_since_to_re = re.compile(r"\d{4}\s*–\s*(?P<year>\d{4})")
 
 
 class AktualneCZV2Extractor(ArticleExtractor):
-    SINCE = datetime(2014, 9, 10)
-    TO = datetime(2019, 9, 10)
 
     def __init__(self):
 
