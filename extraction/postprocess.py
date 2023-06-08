@@ -1,4 +1,5 @@
 # %%
+import argparse
 import json
 from datetime import datetime
 from pathlib import Path
@@ -6,7 +7,6 @@ import sys
 
 from tqdm import tqdm
 
-NUM_PROCESS = 4
 from datasets import Dataset
 from datasets import Features, Value
 from urllib.parse import urlparse
@@ -45,7 +45,7 @@ def get_server(url):
     return server
 
 
-def crawl(file_path, output_path):
+def crawl(file_path, output_path, num_proc):
     records = []
     print("Loading records from file")
     with open(file_path) as f:
@@ -82,7 +82,7 @@ def crawl(file_path, output_path):
         )
     )
     # We will postprocess string values later and cast it manually
-    dataset = dataset.map(lambda batch: {"server": [get_server(url) for url in batch["url"]]}, num_proc=NUM_PROCESS, batched=True)
+    dataset = dataset.map(lambda batch: {"server": [get_server(url) for url in batch["url"]]}, num_proc=num_proc, batched=True)
 
 
     # %%
@@ -106,20 +106,20 @@ def crawl(file_path, output_path):
         return datetime.fromisoformat(date_str).date()
 
     print("Postprocessing")
-    dataset = dataset.map(lambda batch: {"category_unclean": batch["category"]}, batched=True, num_proc=NUM_PROCESS)
+    dataset = dataset.map(lambda batch: {"category_unclean": batch["category"]}, batched=True, num_proc=num_proc)
 
 
     dataset = dataset.rename_column("author", "authors")
 
     for col, funcs in postprocessing.items():
-        dataset = dataset.map(lambda batch: {col: reduce(lambda arts, f:[ f(art) for art in arts], funcs, batch[col])}, batched=True, num_proc=NUM_PROCESS)
+        dataset = dataset.map(lambda batch: {col: reduce(lambda arts, f:[ f(art) for art in arts], funcs, batch[col])}, batched=True, num_proc=num_proc)
 
 
 
     # Convert to date
     dataset = dataset.map(
         lambda batch: { "date": [to_date(dtm) for dtm in batch["publication_date"]] }
-        , batched=True, batch_size=None, num_proc=NUM_PROCESS, remove_columns=["publication_date"]
+        , batched=True, batch_size=None, num_proc=num_proc, remove_columns=["publication_date"]
     )
     print("Adding augmentations")
 
@@ -134,7 +134,7 @@ def crawl(file_path, output_path):
 
 
     for col, func in augmentations.items():
-        dataset = dataset.map(lambda batch: {col: func(batch)}, batched=False, num_proc=NUM_PROCESS)
+        dataset = dataset.map(lambda batch: {col: func(batch)}, batched=False, num_proc=num_proc)
 
 
     print("Casting columns to categorical")
@@ -142,7 +142,7 @@ def crawl(file_path, output_path):
     NONE_LABEL = "None"
 
     def NoneToNoneLabel(dst, column):
-        return dst.map(lambda batch: {column: [NONE_LABEL if x is None else x for x in batch[column]]}, batched=True, num_proc=NUM_PROCESS)
+        return dst.map(lambda batch: {column: [NONE_LABEL if x is None else x for x in batch[column]]}, batched=True, num_proc=num_proc)
 
 
     # %%
@@ -200,12 +200,16 @@ def crawl(file_path, output_path):
 
 
 
+def get_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("input", type=str)
+    parser.add_argument("output", type=str)
+    parser.add_argument("--num-process", type=int, default=4)
+
+    return parser.parse_args()
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 3:
-        print("Usage: python3 crawl.py <path_to_file> <path_to_output>")
-        exit(1)
-
     sys.path.append(Path(__file__).parent)
-    crawl(Path(sys.argv[1]), Path(sys.argv[2]))
+    args = get_args()
+    crawl(args.input, args.output, args.num_process)
