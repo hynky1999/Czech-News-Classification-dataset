@@ -4,8 +4,9 @@ CZEch NEws Classification dataset (CZE-NEC).
 
 Among others this repository also showcases how to use [cmoncrawl](https://github.com/hynky1999/CmonCrawl) with Artemis queue as middleware for distributed extraction.
 
-
 # Download CZE-NEC dataset
+
+First make sure that you also downloaded lfs files. To do that run git lfs pull.
 
 ## Install dependencies
 ```bash pip install -r requirements.txt```
