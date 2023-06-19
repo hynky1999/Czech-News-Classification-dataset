@@ -43,3 +43,9 @@ Note that the generation has no progress bar, so it might look like it is stuck.
 
 ## Contact
 If you have any questions, feel free to contact me at kydlicek.hynek@gmail.com
+
+## How as the dataset gather ?
+Since the data was already preprocess and correct indexes have been found, there is no need for you to run it in distributed setting. You will download about 1.6M files,
+however when we collected the batch for processsing we downloaded around 70M+ Files, in which many were duplicated yielding of around 6M for further filtering.
+We thus needed a distributed collections. If you want to do it you can :). If on slurm run grid_run.sh, which will spawn queue, processors and aggregaors, based on definitions in grid_run.sh.
+Similary you can use docker-swarm since we prepared a docker-compose too
