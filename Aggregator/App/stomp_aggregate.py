@@ -1,7 +1,9 @@
 import argparse
 from datetime import datetime
-from cmoncrawl.middleware.stompware import ArtemisAggregator
-from cmoncrawl.aggregator.index_query import IndexAggregator
+from cmoncrawl.middleware.stompware import StompAggregator
+from cmoncrawl.aggregator.gateway_query import GatewayAggregator
+from cmoncrawl.common.loggers import metadata_logger
+from cmoncrawl.common.types import MatchType
 import asyncio
 
 
@@ -28,17 +30,18 @@ def get_args():
 
 def run():
     args = get_args()
-    index_aggregator = IndexAggregator(
-        domains=[args.url],
+    index_aggregator = GatewayAggregator(
+        urls=[args.url],
         limit=args.limit,
         since=args.since,
         to=args.to,
         cc_servers=args.cc_servers,
         prefetch_size=args.prefetch_size,
         max_retry=args.max_retry,
-        sleep_step=args.sleep_step,
+        sleep_base=args.sleep_step,
+        match_type=MatchType.DOMAIN
     )
-    aggregator = ArtemisAggregator(
+    aggregator = StompAggregator(
         url=args.url,
         queue_host=args.queue_host,
         queue_port=args.queue_port,

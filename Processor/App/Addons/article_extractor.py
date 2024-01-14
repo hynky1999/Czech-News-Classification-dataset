@@ -65,7 +65,7 @@ class ArticleExtractor(BaseExtractor):
 
         metadata.name = metadata.domain_record.url.replace("/", "_")[:80]
         extracted_dict["url"] = metadata.domain_record.url
-        extracted_dict["domain_record"] = metadata.domain_record.to_dict()
+        extracted_dict["domain_record"] = metadata.domain_record.model_dump()
         return extracted_dict
 
     def custom_filter_raw(self, response: str, metadata: PipeMetadata) -> bool:

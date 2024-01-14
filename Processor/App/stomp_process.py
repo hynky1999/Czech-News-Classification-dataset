@@ -1,25 +1,33 @@
 import argparse
 import asyncio
+from contextlib import asynccontextmanager
 import os
 from pathlib import Path
 import random
-from cmoncrawl.middleware.stompware import ArtemisProcessor
-from cmoncrawl.common.types import ExtractConfig
+from cmoncrawl.middleware.stompware import StompProcessor
 from cmoncrawl.processor.pipeline.streamer import StreamerFileJSON
 from cmoncrawl.processor.pipeline.downloader import AsyncDownloader
+from cmoncrawl.processor.dao.api import CCAPIGatewayDAO
 from cmoncrawl.processor.pipeline.pipeline import ProcessorPipeline
-from cmoncrawl.integrations.commands import create_router, load_config
+from cmoncrawl.integrations.extract import create_router, load_config
 from cmoncrawl.common.loggers import all_purpose_logger
 
 
-def construct_pipeine(config_path: Path, max_retry: int, sleep_step: int, output_path: Path, max_directory_size: int, max_file_size: int):
+@asynccontextmanager
+async def construct_pipeline(config_path: Path, max_retry: int, sleep_step: int, output_path: Path, max_directory_size: int, max_file_size: int):
     config = load_config(config_path)
     router = create_router(config)
-    return ProcessorPipeline(
+    dao = CCAPIGatewayDAO()
+    await dao.aopen()
+    yield ProcessorPipeline(
         router=router,
-        downloader=AsyncDownloader(max_retry=max_retry, sleep_step=sleep_step),
+        downloader=AsyncDownloader(max_retry=max_retry, sleep_base=sleep_step, dao=dao),
         outstreamer=StreamerFileJSON(root=output_path, max_directory_size=max_directory_size, max_file_size=max_file_size),
     )
+    await dao.aclose()
+
+
+
 
 
 def get_hostname_output_path(output_path: Path):
@@ -52,23 +60,23 @@ def get_args():
     parser.add_argument("--sleep_step", type=int, default=15)
     return parser.parse_args()
 
-def run():
+async def run():
     args = get_args()
     if args.use_hostname_output:
         args.output_path = get_hostname_output_path(args.output_path)
 
-    pipeline = construct_pipeine(config_path=args.config_path, max_retry=args.max_retry, sleep_step=args.sleep_step, output_path=args.output_path, max_directory_size=5000, max_file_size=100_000)
-    processor = ArtemisProcessor(
-        queue_host=args.queue_host,
-        queue_port=args.queue_port,
-        queue_size=args.queue_size,
-        pills_to_die=args.pills_to_die,
-        pipeline=pipeline,
-        timeout=args.timeout,
-        addresses=args.addresses,
-    )
+    async with construct_pipeline(config_path=args.config_path, max_retry=args.max_retry, sleep_step=args.sleep_step, output_path=args.output_path, max_directory_size=5000, max_file_size=100_000) as pipeline:
+        processor = StompProcessor(
+            queue_host=args.queue_host,
+            queue_port=args.queue_port,
+            queue_size=args.queue_size,
+            pills_to_die=args.pills_to_die,
+            pipeline=pipeline,
+            timeout=args.timeout,
+            addresses=args.addresses,
+        )
 
-    asyncio.run(processor.process())
+        await processor.process()
 
 if __name__ == "__main__":
-    run()
+    asyncio.run(run())
