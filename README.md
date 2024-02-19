@@ -24,10 +24,13 @@ This will take files and merge them into single file (You can use cat or anythin
 Due to memory issues, I had to split the records into multiple files.
 ```cat records.jsonl | split -n l/10 records.jsonl```
 
-## Postprocess records
+## Postprocess records (High-mem usage)
 ```python extraction/postprocess.py records.jsonl dataset --num_proc=4```
 
 This will take records and postprocess them into dataset directory.
+
+## Postprocess records (Low-mem usage)
+```python ./low_mem-usage_postprocess.py```
 
 ## Loading dataset
 To load dataset just run ```datasets.load_from_disk('dataset')```, since dataset is saved using HuggingFace datasets library.
